@@ -1,13 +1,13 @@
 <template>
-  <Markdown></Markdown>
+<ButtonMD />
 </template>
 <script>
-import Markdown from './doc.md';
+import ButtonMD from './doc.md';
 import { defineComponent } from 'vue'
 export default defineComponent({
   name:'ButtonPage',
   components:{
-    Markdown
+    ButtonMD
   }
 })
 </script>

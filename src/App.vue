@@ -7,7 +7,6 @@
 // import Markdown from './doc.md';
 export default {
   name: 'App',
-  
 }
 </script>
 
