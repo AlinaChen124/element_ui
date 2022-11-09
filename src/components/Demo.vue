@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import 'highlight.js/styles/github.css'
+
 import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'Demo',
@@ -35,6 +35,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import 'highlight.js/styles/github.css';
 $border-color: #ececec;
 $primary-color: #409eff;
 $padding: 10px;

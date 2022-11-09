@@ -6,6 +6,7 @@
 ::: demo 
 
 ```html
+<template>
     <my-row gutter="20" style="margin:10px">
         <Button text>默认按钮</Button>
         <Button type="primary" text>主要按钮</Button>
@@ -30,6 +31,7 @@
         <Button type="warning" round>保存</Button>
         <Button type="danger" round>保存</Button>
     </my-row>
+</template>
 ```
 :::
 
@@ -40,6 +42,7 @@
 ::: demo 
 
 ```html
+<template>
     <my-row gutter="20" style="margin:10px">
         <Button disabled>默认按钮</Button>
         <Button type="primary" disabled>主要按钮</Button>
@@ -48,6 +51,7 @@
         <Button type="warning" disabled>警告按钮</Button>
         <Button type="danger" disabled>危险按钮</Button>
     </my-row>
+</template>
 ```
 :::
 
@@ -58,6 +62,7 @@
 ::: demo 
 
 ```html
+<template>
     <my-row gutter="20" style="margin:10px">
         <Button icon="success">默认按钮</Button>
         <Button type="primary" icon="success">主要按钮</Button>
@@ -66,6 +71,7 @@
         <Button type="warning" icon="success">警告按钮</Button>
         <Button type="danger" icon="success">危险按钮</Button>
     </my-row>
+</template>
 ```
 :::
 

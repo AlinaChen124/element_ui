@@ -7,7 +7,9 @@ const DEFAULT_MARKDOWN_OPTIONS = {
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return hljs.highlight(str, { language: lang }).value
+        return hljs.highlight(str, {
+          language: lang
+        }).value
       } catch (err) {
         // ignore
       }
@@ -202,7 +204,9 @@ Parser.prototype.assembleLiveScripts = function () {
     }
     // Get "template": "......"
     const _template = /^{([\s\S]*?)}$/.exec(
-      JSON.stringify({ template: live._template })
+      JSON.stringify({
+        template: live._template
+      })
     )
     if (_template) {
       componentOptions = componentOptions ? `,${componentOptions[1]}` : ''
@@ -232,9 +236,13 @@ Parser.prototype.parse = function (source) {
     result.script = `<script>${result.script || ''}</script>`
     result.style = `<style>${result.style || ''}</style>`
   } else {
-    result = this.options.live
-      ? this.parseLives()
-      : { template: this.source, script: '', style: '' }
+    result = this.options.live ?
+      this.parseLives() :
+      {
+        template: this.source,
+        script: '',
+        style: ''
+      }
   }
   const html = this.markdown.render(result.template)
   let vueFile = `<template><${this.options.wrapper}>${html}</${this.options.wrapper}></template>${result.style}${result.script}`
@@ -245,39 +253,40 @@ Parser.prototype.parse = function (source) {
 }
 
 module.exports = function (source) {
-    if (this.cacheable) {
-        this.cacheable()
-    }
-    const options = this.getOptions()
-    return new Parser(Object.assign(options, {
-        plugins: [
-          // 运行代码的容器定义，用":::"匹配md文件中的需要运行的代码块
-          [ require('markdown-it-container'), 'demo', {
-            validate: function (params) {
-              return params.trim().match(/^demo(.*)$/)
-            },
-            render: function (tokens, idx) {
-              if (tokens[idx].nesting === 1) {
-                // 1.获取第一行的内容使用markdown渲染html作为组件的描述
-                let demoInfo = tokens[idx].info.trim().match(/^demo\s+(.*)$/)
-                let description =
-                  demoInfo && demoInfo.length > 1 ? demoInfo[1] : ''
-                let descriptionHTML = description
-                  ? MarkdownIt().render(description)
-                  : ''
-                // 2.获取代码块内的html和js代码
-                let content = tokens[idx + 1].content
-                // 3.使用自定义开发组件【DemoBlock】来包裹内容并且渲染成案例和代码示例
-                return `<Demo>
-        <template v-slot:source>${content}</template>
+  if (this.cacheable) {
+    this.cacheable()
+  }
+  const options = this.getOptions()
+  return new Parser(Object.assign(options, {
+    plugins: [
+      // 运行代码的容器定义，用":::"匹配md文件中的需要运行的代码块
+      [require('markdown-it-container'), 'demo', {
+        validate: function (params) {
+          return params.trim().match(/^demo(.*)$/)
+        },
+        render: function (tokens, idx) {
+          if (tokens[idx].nesting === 1) {
+            // 1.获取第一行的内容使用markdown渲染html作为组件的描述
+            let demoInfo = tokens[idx].info.trim().match(/^demo\s+(.*)$/)
+            let description =
+              demoInfo && demoInfo.length > 1 ? demoInfo[1] : ''
+            let descriptionHTML = description ?
+              MarkdownIt().render(description) :
+              ''
+            // 2.获取代码块内的html和js代码
+            let content = tokens[idx + 1].content
+            const html = content.trim().match(/(?<=((<[template]+?){0,1}>))([\s\S]+)(?=([\s]{0,1}<\/[template]+(>{0,1})))/g)?.[0].trim();
+            // 3.使用自定义开发组件【DemoBlock】来包裹内容并且渲染成案例和代码示例
+            return `<Demo>
+        <template v-slot:source>${html}</template>
         <template v-slot:description>${descriptionHTML}</template>
         <div class="highlight" slot="highlight">`
-              } else {
-                return '</div></Demo>\n'
-              }
-            }
-          } ]
-        ],
-      }
-    )).parse(source)
+          } else {
+            return `</div></Demo>\n`
+          }
+        }
+      }],
+      
+    ]
+  })).parse(source)
 }

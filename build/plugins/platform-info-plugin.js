@@ -60,7 +60,7 @@ class PlatformInfoPlugin {
     }
     apply(compiler) {
         compiler.hooks.emit.tapAsync('PlatformInfoPlugin', function(compilation, callback) {
-            console.log('processAssets', compilation.hooks.processAssets)
+            // console.log('processAssets', compilation.hooks.processAssets)
             compilation.assets['Platform.txt'] = {
                 source: function() {
                     const title = `平台系统信息${os.EOL}${os.EOL}`
